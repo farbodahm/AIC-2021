@@ -19,16 +19,16 @@ Answer *AI::turn(Game *game)
         return new Answer(UP, all, 5);
     else
         return new Answer(DOWN, all, 5);
+
+
+    CellType home;
     */
-
-
-    //CellType home;
 
     Ant* me = game->getAnt();
     cout << me->getHealth() << " " << me->getTeam() << endl;
 
-    int hx = game -> getBaseX();
-    int hy = game -> getBaseY();
+    int hx = game -> getBaseX();   // home x
+    int hy = game -> getBaseY();   // home y
 
     int viewDist = me->getViewDistance();
 
@@ -49,14 +49,6 @@ Answer *AI::turn(Game *game)
                     targetY = cell->getY();
                     break;
                 }
-
-                /*
-                if (cell->getResource()->getType() == BASE)
-                {
-                    home = BASE;
-                }
-                */
-
             }
             if (targetX != -1)
                 break;
@@ -72,8 +64,7 @@ Answer *AI::turn(Game *game)
 
     Direction direction = CENTER;
 
-
-    if(me -> getCurrentResource()-> getType() != NONE)
+    if (me -> getCurrentResource()-> getType() != NONE)
     {
         if (hx > x) {
             direction = RIGHT;
@@ -82,14 +73,113 @@ Answer *AI::turn(Game *game)
             direction = LEFT;
         }
         else if (hy > y) {
+               direction = UP;
+        }
+        else{
             direction = DOWN;
         }
-        else {
-            direction = UP;
+        return new Answer(direction, "I found a resource and I'm going to get it! :)", 10);
+        // TODO for blocks
+    }
+
+    else
+    {
+        Cell* next;
+
+        if (targetX > x)
+        {
+            next = me -> getNeighborCell(x + 1, y);
+
+            if (next -> getType() == WALL)    // RIGHT is block
+            {
+                next = me -> getNeighborCell(x, y + 1);
+                direction = UP;
+                if (next -> getType() == WALL)    // UP is block
+                {
+                    next = me -> getNeighborCell(x, y - 1);
+                    direction = DOWN;
+                    if (next -> getType() == WALL)    // DOWN is block
+                    {
+                        direction = LEFT;
+                    }
+                }
+            }
+            else
+            {
+                direction = RIGHT;
+            }
+        }
+        else if (targetX < x)
+        {
+            next = me -> getNeighborCell(x - 1 , y);
+            if (next -> getType() == WALL)    // LEFT is block
+            {
+                next = me -> getNeighborCell(x, y + 1);
+                direction = UP;
+                if (next -> getType() == WALL)    // UP is block
+                {
+                    next = me -> getNeighborCell(x, y - 1);
+                    direction = DOWN;
+                    if (next -> getType() == WALL)    // DOWN is block
+                    {
+                        direction = RIGHT;
+                    }
+                }
+            }
+            else
+            {
+                direction = LEFT;
+            }
+        }
+        else if (targetY > y)
+        {
+            next = me -> getNeighborCell(x, y + 1);
+            if (next -> getType() == WALL)     // UP is block
+            {
+                next = me -> getNeighborCell(x - 1, y);
+                direction = LEFT;
+                if (next -> getType() == WALL)    // LEFT is block
+                {
+                    next = me -> getNeighborCell(x, y - 1);
+                    direction = DOWN;
+                    if (next -> getType() == WALL)    // DOWN is block
+                    {
+                        direction = RIGHT;
+                    }
+                }
+            }
+            else
+            {
+                direction = UP;
+            }
+        }
+        else
+        {
+            next = me -> getNeighborCell(x, y - 1);
+
+            if (next -> getType() == WALL)     // DOWN is block
+            {
+                next = me -> getNeighborCell(x - 1, y);
+                direction = LEFT;
+                if (next -> getType() == WALL)    // LEFT is block
+                {
+                    next = me -> getNeighborCell(x, y + 1);
+                    direction = UP;
+                    if (next -> getType() == WALL)    // UP is block
+                    {
+                        direction = RIGHT;
+                    }
+                }
+            }
+            else
+            {
+                direction = DOWN;
+            }
         }
         return new Answer(direction, "I found a resource and I'm going to get it! :)", 10);
     }
-    else{
+    /*
+     else{
         if (targetX > x) {
             direction = RIGHT;
         }
@@ -97,11 +187,12 @@ Answer *AI::turn(Game *game)
             direction = LEFT;
         }
         else if (targetY > y) {
-            direction = DOWN;
+            direction = UP;
         }
         else {
-            direction = UP;
+            direction = DOWN;
         }
         return new Answer(direction, "I found a resource and I'm going to get it! :)", 10);
     }
+    */
 }
