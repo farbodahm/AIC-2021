@@ -11,6 +11,8 @@ public:
     Answer* turn(Game *game);
     void saveMap(const Ant* me);
     vector<pair<int, int>> findPath(const Ant* me, pair<int, int> dest);
+    vector<pair<int, int>> findPathSafe(const Ant* me, pair<int, int> dest);
+    vector<pair<int, int>> findPathWithoutTraps(const Ant* me, pair<int, int> dest);
     Direction getDirection(const Ant* me);
     pair<int, int> getRandomFarPoint(const Ant* me, int width, int height);
     vector<pair<int, int>> getResourcePath(const Ant* me);
@@ -19,6 +21,7 @@ public:
     bool isInRange(int x, int y);
     AI();
     vector<pair<int, int>> findFirstUnfound(const Ant* me);
+    vector<pair<int, int>> findFirstUnfoundSafe(const Ant* me);
 
     unsigned char* encodeMessage(const Ant* me);
     void decodeMessage(const Ant* me, const Game* game);
