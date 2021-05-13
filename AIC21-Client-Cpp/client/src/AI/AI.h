@@ -32,6 +32,7 @@ public:
     vector<pair<int, int>> goingPath;
     vector<pair<int, int>> randomAreas;
     vector<string> dContents;
+    vector<bool> dAttack;
 
     pair<int, int> farthestPoint;
     pair<int, int> previousPoint;
@@ -51,7 +52,7 @@ public:
 
     bool ImInAttack;
     bool foundBase;
-    vector<bool> dAttack;
+    bool goingHome;
 };
 
 #endif // AIC21_CLIENT_CPP_AI_H
